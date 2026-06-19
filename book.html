@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hill St. Kiosk — Book</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { min-height: 100%; }
+
+    body {
+      min-height: 100%;
+      background: #ffffff;
+      font-family: 'Times New Roman', Times, serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .marquee-bar {
+      display: block;
+      background: #fe4531;
+      color: #ffffff;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 14px;
+      font-weight: bold;
+      padding: 6px 0;
+      line-height: 1.4;
+    }
+
+    .page-wrapper {
+      display: flex;
+      flex: 1;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 200px;
+      min-width: 200px;
+      background: #c4ddce;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .logo-wrap {
+      height: 324px;
+      padding-top: 80px;
+      flex-shrink: 0;
+    }
+
+    .logo-star-wrap {
+      display: inline-block;
+      position: relative;
+      margin-left: 48px;
+    }
+    .logo-star-wrap > img { display: block; }
+    .logo-link { display: block; }
+    .star {
+      position: absolute;
+      color: #fe4531;
+      font-size: 11px;
+      pointer-events: none;
+      opacity: 0;
+      animation: star-appear 0.35s ease forwards;
+      -webkit-font-smoothing: none;
+      font-family: Arial, sans-serif;
+    }
+    @keyframes star-appear {
+      from { opacity: 0; transform: scale(0.5); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes star-disappear {
+      from { opacity: 1; transform: scale(1); }
+      to   { opacity: 0; transform: scale(0.5); }
+    }
+
+    .sidebar-title {
+      margin-top: 8px;
+      text-align: center;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 24.42px;
+      color: #000000;
+    }
+
+    .sidebar-tagline {
+      margin-top: 8px;
+      text-align: center;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      line-height: 14.65px;
+      color: #000000;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      width: 200px;
+      height: 45px;
+      padding-left: 55px;
+      gap: 8px;
+      font-family: 'Brush Script MT', 'Segoe Script', cursive;
+      font-size: 24px;
+      font-style: italic;
+      font-weight: 400;
+      color: #000000;
+      text-decoration: none;
+      background: transparent;
+    }
+
+    .nav-item .nav-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .nav-item:hover { text-decoration: underline; }
+    .nav-item.selected { background: #cfe5d8; }
+
+    /* ── Main content ── */
+    .main-content {
+      flex: 1;
+      min-width: 0;
+      background: #ffffff;
+      padding: 80px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Site title */
+    .site-title {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 700;
+      font-size: 56px;
+      line-height: 68.4px;
+      text-align: center;
+      color: #000000;
+      width: 480px;
+      margin-bottom: 40px;
+    }
+
+    /* Hero */
+    .container-hero {
+      width: 480px;
+      margin-bottom: 40px;
+    }
+
+    .hero-images {
+      display: flex;
+      width: 444px;
+      height: 174px;
+      margin: 0 auto 24px auto;
+    }
+
+    .hero-images img {
+      width: 148px;
+      height: 174px;
+      object-fit: cover;
+      display: block;
+      background: #f5f5f5;
+    }
+
+    .title-text h2 {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 27.6px;
+      text-align: center;
+      color: #000000;
+      margin-bottom: 8px;
+    }
+
+    .title-text p {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 20.7px;
+      color: #000000;
+      width: 480px;
+    }
+
+    /* ── Tier boxes ── */
+    .tier-box {
+      width: 560px;
+      border: 1px solid #000000;
+      margin-bottom: 40px;
+      flex-shrink: 0;
+    }
+
+    .tier-title {
+      height: 39px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tier-title span {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 20.7px;
+      text-align: center;
+    }
+
+    .tier-price {
+      height: 39px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tier-price span {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 20.7px;
+      color: #000000;
+    }
+
+    .tier-content {
+      height: 106px;
+      display: flex;
+      align-items: flex-start;
+      padding: 32px 16px 0 16px;
+      gap: 16px;
+    }
+
+    .tier-contentbox {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .tier-contentbox img {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .tier-contentbox p {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 20.7px;
+      color: #000000;
+    }
+
+    /* Tier color variants */
+    .tier-title-classic  { background: #353535; }
+    .tier-title-classic span { color: #ffffff; }
+    .tier-price-classic  { background: #cfcfcf; }
+
+    .tier-title-premium  { background: #c90000; }
+    .tier-title-premium span { color: #ffffff; }
+    .tier-price-premium  { background: #ffdede; }
+
+    .tier-title-signature  { background: #ffffff; }
+    .tier-title-signature span { color: #000000; }
+    .tier-price-signature  { background: #ffffff; }
+
+    /* ── Form ── */
+    .form {
+      width: 560px;
+      margin-bottom: 40px;
+    }
+
+    .form-heading {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 27.6px;
+      color: #000000;
+      text-align: center;
+      width: 560px;
+      padding-top: 16px;
+      height: 44px;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      width: 560px;
+      height: 29px;
+      margin-top: 16px;
+    }
+
+    .input-row-textarea {
+      display: flex;
+      align-items: flex-start;
+      width: 560px;
+      height: 109px;
+      margin-top: 16px;
+    }
+
+    .input-label {
+      width: 80px;
+      height: 21px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 20.7px;
+      color: #000000;
+      flex-shrink: 0;
+      margin-right: 8px;
+    }
+
+    .input-field {
+      width: 472px;
+      height: 29px;
+      border: 1px solid #b0b0b0;
+      outline: none;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 18px;
+      font-weight: 400;
+      color: #000000;
+      padding: 0 4px;
+    }
+
+    .textarea-field {
+      width: 472px;
+      height: 109px;
+      border: 1px solid #b0b0b0;
+      outline: none;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 18px;
+      font-weight: 400;
+      color: #000000;
+      padding: 4px;
+      resize: none;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: flex-end;
+      width: 560px;
+      margin-top: 16px;
+    }
+
+    .send-button {
+      width: 57px;
+      height: 29px;
+      background: linear-gradient(to bottom, #ffffff, #f1f1f1);
+      border: 1px solid #b0b0b0;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 18px;
+      font-weight: 400;
+      color: #000000;
+      cursor: pointer;
+    }
+
+    /* ── Contact ── */
+    .contact-section {
+      width: 480px;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .contact-section .contact-label {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 20.7px;
+      color: #000000;
+      margin-bottom: 8px;
+    }
+
+    .contact-section .contact-email {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 20.7px;
+      color: #000000;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      width: 480px;
+      text-align: center;
+    }
+
+    .footer .attribution {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 16.1px;
+      color: #000000;
+      margin-bottom: 8px;
+    }
+
+    .footer .copyright {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 16.1px;
+      color: #353535;
+    }
+
+    /* ── Cursors ── */
+    body { cursor: none; }
+    a, button { cursor: none; }
+    input[type="text"], input[type="email"], textarea { cursor: url('images/Cursor80.cur'), text; }
+    :disabled, [disabled] { cursor: url('images/Cursor99.cur'), not-allowed; }
+    [title], abbr { cursor: url('images/Cursor103.cur'), help; }
+
+    /* ── Link colours ── */
+    a:link    { color: #0000EE; }
+    a:visited { color: #551A8B; }
+    a:active  { color: #EE0000; }
+
+    /* ── Responsive ── */
+
+    /* ── Mobile nav bar (hidden on desktop) ── */
+    .mobile-nav { display: none; }
+
+    /* ── 1024px breakpoint: horizontal top nav ── */
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+
+      .mobile-nav {
+        display: flex;
+        align-items: center;
+        background: #c4ddce;
+        width: 100%;
+        height: 86px;
+        padding-left: 16px;
+        flex-shrink: 0;
+      }
+
+      .mobile-logo {
+        width: 35px;
+        height: 32px;
+        flex-shrink: 0;
+        margin-right: 16px;
+      }
+
+      .mobile-nav-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        height: 38px;
+        gap: 4px;
+        font-family: 'Brush Script MT', 'Segoe Script', cursive;
+        font-size: 18px;
+        font-style: italic;
+        font-weight: 400;
+        color: #000000;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .mobile-nav-item .nav-icon {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .mobile-nav-item.selected { background: #cfe5d8; }
+
+      .main-content { padding-left: 24px; padding-right: 24px; }
+
+      /* 3 photos with 27px gaps, fluid, 130×174 aspect ratio per book-1024 frame */
+      .hero-images {
+        width: 100%;
+        height: auto;
+        gap: 27px;
+      }
+
+      .hero-images img {
+        flex: 1 1 0%;
+        min-width: 0;
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 130 / 174;
+        object-fit: cover;
+      }
+
+      /* prevent fixed-width elements from overflowing narrow viewports */
+      .container-hero,
+      .site-title,
+      .tier-box,
+      .form,
+      .form-heading,
+      .input-row,
+      .input-row-textarea,
+      .button-row,
+      .contact-section,
+      .footer { width: 100%; }
+
+      .title-text p { width: 100%; }
+      .input-field { width: calc(100% - 88px); }
+      .textarea-field { width: calc(100% - 88px); }
+    }
+
+    /* ── 390px breakpoint ── */
+    @media (max-width: 390px) {
+      /* section: 64px top/bottom, 16px sides — matches book-390 frame */
+      .main-content { padding: 64px 16px; }
+
+      .site-title {
+        font-size: 40px;
+        line-height: 48.84px;
+      }
+
+      /* photos: 8px gaps at 390px (3×114px + 2×8px = 358px) */
+      .hero-images { gap: 8px; }
+
+      /* tier content boxes stack vertically */
+      .tier-content {
+        flex-direction: column;
+        height: auto;
+        padding-bottom: 32px;
+      }
+
+      /* form: label sits above field */
+      .input-row,
+      .input-row-textarea {
+        flex-direction: column;
+        height: auto;
+        align-items: flex-start;
+      }
+
+      .input-label {
+        width: auto;
+        margin-right: 0;
+        margin-bottom: 8px;
+      }
+
+      .input-field,
+      .textarea-field { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <marquee class="marquee-bar" behavior="scroll" direction="left" scrollamount="4">★ Welcome to Hill St. Kiosk on the Web! :-) ♦ Book us for your next event! ★ &nbsp;&nbsp; ► [ NEW ] Now booking 2026 events! ☺ ♦ Weddings ★ Birthdays ★ Corporate events ► Email us today! ;-) &nbsp;&nbsp; ~~ Warning: highly addictive :-D ~~ Hill St. Kiosk sticker machines ♦ Side effects include joy and nostalgia ☻ ~*~ &nbsp;&nbsp; ★ Stickers for everyone! ツ ~*~ Est. 2026 ♦ Your guests will LOVE it ► Book now! B-) ★ &nbsp;&nbsp; ► [ HOT ] Check out our Gallery! ☺ ♦ [ UPDATE ] Book page now live! :-P ★ [ NEW ] Sticker machines available! ► ツ &nbsp;&nbsp;&nbsp;&nbsp; ★ Welcome to Hill St. Kiosk on the Web! :-) ♦ Book us for your next event! ★ &nbsp;&nbsp; ► [ NEW ] Now booking 2026 events! ☺ ♦ Weddings ★ Birthdays ★ Corporate events ► Email us today! ;-) &nbsp;&nbsp; ~~ Warning: highly addictive :-D ~~ Hill St. Kiosk sticker machines ♦ Side effects include joy and nostalgia ☻ ~*~ &nbsp;&nbsp; ★ Stickers for everyone! ツ ~*~ Est. 2026 ♦ Your guests will LOVE it ► Book now! B-) ★ &nbsp;&nbsp; ► [ HOT ] Check out our Gallery! ☺ ♦ [ UPDATE ] Book page now live! :-P ★ [ NEW ] Sticker machines available! ► ツ</marquee>
+
+  <nav class="mobile-nav">
+    <img class="mobile-logo" src="images/hill-st-kiosk-logo.svg" alt="Hill St. Kiosk">
+    <a href="index.html" class="mobile-nav-item"><img src="images/folder-icon.png" alt="" class="nav-icon">Home</a>
+    <a href="book.html" class="mobile-nav-item selected"><img src="images/folder-icon-check.png" alt="" class="nav-icon">Book</a>
+    <a href="gallery.html" class="mobile-nav-item"><img src="images/folder-icon.png" alt="" class="nav-icon">Gallery</a>
+    <a href="about.html" class="mobile-nav-item"><img src="images/folder-icon.png" alt="" class="nav-icon">About</a>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <!-- ── Sidebar ── -->
+    <div class="sidebar">
+      <div class="logo-wrap">
+        <div class="logo-star-wrap">
+          <a href="index.html" class="logo-link">
+            <img src="images/hill-st-kiosk-logo.svg" alt="Hill St. Kiosk logo" width="104" height="94">
+          </a>
+        </div>
+        <p class="sidebar-title">Hill St. Kiosk</p>
+        <p class="sidebar-tagline">a sticker machine company</p>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="index.html" class="nav-item">
+          <img src="images/folder-icon.png" alt="" class="nav-icon">Home
+        </a>
+        <a href="book.html" class="nav-item selected">
+          <img src="images/folder-icon-check.png" alt="" class="nav-icon">Book
+        </a>
+        <a href="gallery.html" class="nav-item">
+          <img src="images/folder-icon.png" alt="" class="nav-icon">Gallery
+        </a>
+        <a href="about.html" class="nav-item">
+          <img src="images/folder-icon.png" alt="" class="nav-icon">About
+        </a>
+      </nav>
+    </div>
+
+    <!-- ── Main content ── -->
+    <div class="main-content">
+
+      <h1 class="site-title">Hill St. Kiosk</h1>
+
+      <div class="container-hero">
+        <div class="hero-images">
+          <img src="images/img-stock.png" alt="" width="148" height="174">
+          <img src="images/img-stock.png" alt="" width="148" height="174">
+          <img src="images/img-stock.png" alt="" width="148" height="174">
+        </div>
+        <div class="title-text">
+          <h2>How does it work?</h2>
+          <p>O.K., so you curious about pricing and what you get. We have three tiers based on budget and custom art options. </p>
+        </div>
+      </div>
+
+      <!-- CLASSIC -->
+      <div class="tier-box">
+        <div class="tier-title tier-title-classic"><span>CLASSIC</span></div>
+        <div class="tier-price tier-price-classic"><span>$450-550 per event</span></div>
+        <div class="tier-content">
+          <div class="tier-contentbox">
+            <img src="images/img-stock.png" alt="" width="16" height="16">
+            <p>Pick 2 designs from gallery</p>
+          </div>
+          <div class="tier-contentbox">
+            <img src="images/img-stock.png" alt="" width="16" height="16">
+            <p>Best for events up to 100 guests.</p>
+          </div>
+          <div class="tier-contentbox">
+            <img src="images/img-stock.png" alt="" width="16" height="16">
+            <p>200 stickers total</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="tier-box">
+        <div class="tier-title tier-title-premium"><span>PREMIUM</span></div>
+        <div class="tier-price tier-price-premium"><span>$750-900 per event</span></div>
+        <div class="tier-content">
+          <div class="tier-contentbox">
+            <img src="images/img-stock.png" alt="" width="16" height="16">
+            <p>Pick 2 designs from gallery</p>
+          </div>
+          <div class="tier-contentbox">
+            <img src="images/img-stock.png" alt="" width="16" height="16">
+            <p>1 custom design</p>
+          </div>
+          <div class="tier-contentbox">
+            <img src="images/img-stock.png" alt="" width="16" height="16">
+            <p>300 stickers total</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIGNATURE -->
+      <div class="tier-box">
+        <div class="tier-title tier-title-signature"><span>SIGNATURE</span></div>
+        <div class="tier-price tier-price-signature"><span>$950-1100 per event</span></div>
+        <div class="tier-content">
+          <div class="tier-contentbox">
+            <img src="images/img-stock.png" alt="" width="16" height="16">
+            <p>Pick 1 design from gallery</p>
+          </div>
+          <div class="tier-contentbox">
+            <img src="images/img-stock.png" alt="" width="16" height="16">
+            <p>2 custom designs</p>
+          </div>
+          <div class="tier-contentbox">
+            <img src="images/img-stock.png" alt="" width="16" height="16">
+            <p>450 stickers total</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <form class="form" id="booking-form" action="https://formspree.io/f/mlgkeavq" method="POST">
+        <p class="form-heading">Ready to book?</p>
+        <div class="input-row">
+          <div class="input-label">Name*:</div>
+          <input class="input-field" type="text" name="name" placeholder="Your name">
+        </div>
+        <div class="input-row">
+          <div class="input-label">Email*:</div>
+          <input class="input-field" type="email" name="email" placeholder="Your email address">
+        </div>
+        <div class="input-row-textarea">
+          <div class="input-label">Message:</div>
+          <textarea class="textarea-field" name="message" placeholder="Tell us about your event — date, location, expected guests..."></textarea>
+        </div>
+        <div class="button-row">
+          <button class="send-button">Send</button>
+        </div>
+      </form>
+
+      <!-- Contact -->
+      <div class="contact-section">
+        <p class="contact-label">Question?</p>
+        <p class="contact-email"><a href="book.html#booking-form">use this link here</a></p>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <p class="attribution">This site was constructed and maintained by Roy K.</p>
+        <p class="copyright">Copyright &copy; 2026 Hill St Kiosk</p>
+      </div>
+
+    </div>
+  </div>
+
+
+  <script>
+    (function () {
+      var N = 5;
+      var history = [];
+      var ghosts = [];
+      var mx = -200, my = -200;
+      var active = false;
+      var hideTimer;
+      var isPointer = false;
+
+      // Primary cursor: 48×48, zero lag — sits exactly at the mouse tip
+      var primary = document.createElement('img');
+      primary.src = 'images/Cursor79.cur';
+      primary.style.cssText = 'position:fixed;pointer-events:none;z-index:9999;width:48px;height:48px;image-rendering:pixelated;left:-200px;top:-200px;';
+      document.body.appendChild(primary);
+
+      document.addEventListener('mousemove', function (e) {
+        mx = e.clientX; my = e.clientY;
+        active = true;
+        primary.style.left = mx + 'px';
+        primary.style.top  = my + 'px';
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(function () {
+          active = false;
+          history.length = 0;
+          for (var i = 0; i < N; i++) { ghosts[i].style.left = '-200px'; ghosts[i].style.top = '-200px'; }
+        }, 100);
+      });
+
+      // Swap primary to pointer cursor when over links/buttons
+      document.addEventListener('mouseover', function (e) {
+        var el = e.target;
+        var onPointer = !!(el && el.closest && el.closest('a, button'));
+        if (onPointer !== isPointer) {
+          isPointer = onPointer;
+          primary.src = isPointer ? 'images/Cursor107.cur' : 'images/Cursor79.cur';
+        }
+      });
+
+      for (var i = 0; i < N; i++) {
+        var g = document.createElement('img');
+        g.src = 'images/Cursor79.cur';
+        g.style.cssText = 'position:fixed;pointer-events:none;z-index:9998;width:48px;height:48px;image-rendering:pixelated;left:-200px;top:-200px;opacity:' + (0.5 - i * 0.4 / 6).toFixed(2);
+        document.body.appendChild(g);
+        ghosts.push(g);
+      }
+
+      setInterval(function () {
+        if (!active) return;
+        history.unshift({ x: mx, y: my });
+        if (history.length > N + 1) history.length = N + 1;
+        for (var i = 0; i < N; i++) {
+          var p = history[i + 1] || { x: -200, y: -200 };
+          ghosts[i].style.left = p.x + 'px';
+          ghosts[i].style.top  = p.y + 'px';
+        }
+      }, 50);
+    }());
+  </script>
+  <script>
+    (function() {
+      var positions = [
+        { top: '-12px', left:  '-6px' },
+        { top: '-14px', left:  '38px' },
+        { top: '-12px', left:  '88px' },
+        { top:  '10px', left: '108px' },
+        { top:  '45px', left: '112px' },
+        { top:  '86px', left:  '88px' },
+        { top:  '90px', left:  '38px' },
+        { top:  '86px', left:  '-6px' },
+        { top:  '45px', left: '-14px' },
+        { top:  '10px', left: '-14px' },
+      ];
+      var chars = ['★', '☆'];
+      document.querySelectorAll('.logo-star-wrap').forEach(function(wrap) {
+        var hovering = false;
+        var timer = null;
+        var lastIdx = -1;
+        function spawnStar() {
+          var idx;
+          do { idx = Math.floor(Math.random() * positions.length); } while (idx === lastIdx);
+          lastIdx = idx;
+          var el = document.createElement('span');
+          el.className = 'star';
+          el.textContent = chars[Math.floor(Math.random() * 2)];
+          el.style.top  = positions[idx].top;
+          el.style.left = positions[idx].left;
+          wrap.appendChild(el);
+          setTimeout(function() {
+            if (el.parentNode) {
+              el.style.animation = 'star-disappear 0.3s ease forwards';
+              el.addEventListener('animationend', function() {
+                if (el.parentNode) el.parentNode.removeChild(el);
+              }, { once: true });
+            }
+          }, 400);
+        }
+        function tick() {
+          if (!hovering) return;
+          spawnStar();
+          timer = setTimeout(tick, 250 + Math.floor(Math.random() * 300));
+        }
+        wrap.addEventListener('mouseenter', function() {
+          hovering = true;
+          tick();
+        });
+        wrap.addEventListener('mouseleave', function() {
+          hovering = false;
+          clearTimeout(timer);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

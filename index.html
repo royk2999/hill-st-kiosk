@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hill St. Kiosk</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #ffffff;
+      font-family: 'Times New Roman', Times, serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Marquee: #fe4531, block, flush against top ── */
+    .marquee-bar {
+      display: block;
+      background: #fe4531;
+      color: #ffffff;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 14px;
+      font-weight: bold;
+      padding: 6px 0;
+      line-height: 1.4;
+      flex-shrink: 0;
+    }
+
+    /* ── Page wrapper: fills remaining height after marquee ── */
+    .page-wrapper {
+      display: flex;
+      flex: 1;
+    }
+
+    /* ── Sidebar: 200px wide, #c4ddce, stretches full remaining height ── */
+    .sidebar {
+      width: 200px;
+      min-width: 200px;
+      background: #c4ddce;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      /* stretch is the flex default — sidebar matches page-wrapper height */
+    }
+
+    /* logo at x=48, y=80; title + tagline below; nav sits at y=324 */
+    .logo-wrap {
+      height: 324px;
+      padding-top: 80px;
+      flex-shrink: 0;
+    }
+
+    .logo-star-wrap {
+      display: inline-block;
+      position: relative;
+      margin-left: 48px;
+    }
+    .logo-star-wrap > img { display: block; }
+    .logo-link { display: block; }
+    .star {
+      position: absolute;
+      color: #fe4531;
+      font-size: 11px;
+      pointer-events: none;
+      opacity: 0;
+      animation: star-appear 0.35s ease forwards;
+      -webkit-font-smoothing: none;
+      font-family: Arial, sans-serif;
+    }
+    @keyframes star-appear {
+      from { opacity: 0; transform: scale(0.5); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes star-disappear {
+      from { opacity: 1; transform: scale(1); }
+      to   { opacity: 0; transform: scale(0.5); }
+    }
+
+    /* Helvetica Neue Bold 20px, centered — from Figma sidebar component */
+    .sidebar-title {
+      margin-top: 8px;
+      text-align: center;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 24.42px;
+      color: #000000;
+    }
+
+    /* Helvetica Neue Bold 12px, centered — from Figma sidebar component */
+    .sidebar-tagline {
+      margin-top: 8px;
+      text-align: center;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      line-height: 14.65px;
+      color: #000000;
+    }
+
+    /* ── Nav: sidebar-pages at y=324, items 200×45px ── */
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* page-wrap at x=55; icon 16×16; 8px gap; Brush Script MT Italic 400 24px */
+    .nav-item {
+      display: flex;
+      align-items: center;
+      width: 200px;
+      height: 45px;
+      padding-left: 55px;
+      gap: 8px;
+      font-family: 'Brush Script MT', 'Segoe Script', cursive;
+      font-size: 24px;
+      font-style: italic;
+      font-weight: 400;
+      color: #000000;
+      text-decoration: none;
+      background: transparent;
+    }
+
+    .nav-item .nav-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .nav-item:hover { text-decoration: underline; }
+    .nav-item.selected { background: #cfe5d8; }
+
+    /* ── Section: 1240px, #ffffff ── */
+    .section {
+      flex: 1;
+      min-width: 0;
+      background: #ffffff;
+      padding: 80px 0;
+    }
+
+    /* 480px content column centered in the 1240px section */
+    .content-col {
+      width: 480px;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── site-title: Helvetica Neue Bold 700 56px / 68.4px, centered, 480×68px ── */
+    .site-title {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 700;
+      font-style: normal;
+      font-size: 56px;
+      line-height: 68.4px;
+      text-align: center;
+      color: #000000;
+      /* gap to container-hero: 188 - 148 = 40px */
+      margin-bottom: 40px;
+    }
+
+    /* ── container-hero: 480×226px; gap 40px below title ── */
+    .container-hero {
+      margin-bottom: 80px;
+    }
+
+    /* Frame 60: 3 images × 130×174px, 27px gaps = 444px; centered in 480px col */
+    .hero-images {
+      display: flex;
+      gap: 27px;
+      width: 444px;
+      /* (480-444)/2 = 18px auto margin each side */
+      margin: 0 auto 24px auto;
+    }
+
+    .hero-images img {
+      width: 130px;
+      height: 174px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* "Welcome…": TNR Bold 700 24px / 27.6px, centered; y=198 in hero (24px below images) */
+    .hero-text {
+      font-family: 'Times New Roman', Times, serif;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 27.6px;
+      text-align: center;
+      color: #000000;
+    }
+
+    /* ── container: 480px wide, two 224px cards, 32px gap; 40px below hero ── */
+    .container {
+      display: flex;
+      gap: 32px;
+      width: 480px;
+      margin-bottom: 80px;
+    }
+
+    /* Each img-text card: 224×143px */
+    .img-text {
+      width: 224px;
+      flex-shrink: 0;
+    }
+
+    /* missing-img-wrap: 64×64px, fill #ffffff, 1px stroke #C5C5C5 */
+    .missing-img-wrap {
+      width: 64px;
+      height: 64px;
+      background: #ffffff;
+      border: 1px solid #C5C5C5;
+      position: relative;
+      margin-bottom: 16px;
+      flex-shrink: 0;
+    }
+
+    /* missing-img icon: ~11×13px, staggered to top-left (Figma: x≈5.5, y≈5.5) */
+    .missing-img-wrap img {
+      position: absolute;
+      top: 5.5px;
+      left: 5.5px;
+      width: 11px;
+      height: 13px;
+      display: block;
+    }
+
+    /* Card body text: TNR Regular 400 18px / 20.7px, left-aligned */
+    .img-text p {
+      font-family: 'Times New Roman', Times, serif;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 20.7px;
+      color: #000000;
+      text-align: left;
+    }
+
+    /* ── contact-us-text: 480×50px; gap 40px below container ── */
+    .contact-us-text {
+      width: 480px;
+      margin-bottom: 80px;
+    }
+
+    /* "Contact Us!": TNR Bold 700 18px / 20.7px, centered, height 21px */
+    .contact-label {
+      font-family: 'Times New Roman', Times, serif;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 20.7px;
+      text-align: center;
+      color: #000000;
+      /* gap to email: 666-637-21 = 8px */
+      margin-bottom: 8px;
+    }
+
+    /* email: TNR Regular 400 18px / 20.7px, centered */
+    .contact-email {
+      font-family: 'Times New Roman', Times, serif;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 20.7px;
+      text-align: center;
+      color: #000000;
+    }
+
+    /* ── site-constructed-text: 480×40px; gap 40px below contact ── */
+    .site-constructed-text {
+      width: 480px;
+      text-align: center;
+    }
+
+    /* attribution: TNR Regular 400 14px / 16.1px, #000000 */
+    .attribution {
+      font-family: 'Times New Roman', Times, serif;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 16.1px;
+      color: #000000;
+      /* gap to copyright: 751-727-16 = 8px */
+      margin-bottom: 8px;
+    }
+
+    /* copyright: TNR Italic 400 14px / 16.1px, #353535 */
+    .copyright {
+      font-family: 'Times New Roman', Times, serif;
+      font-weight: 400;
+      font-style: italic;
+      font-size: 14px;
+      line-height: 16.1px;
+      color: #353535;
+    }
+
+    /* ── Cursors ── */
+    body { cursor: none; }
+    a, button { cursor: none; }
+    input[type="text"], input[type="email"], textarea { cursor: url('images/Cursor80.cur'), text; }
+    :disabled, [disabled] { cursor: url('images/Cursor99.cur'), not-allowed; }
+    [title], abbr { cursor: url('images/Cursor103.cur'), help; }
+
+    /* ── Link colours ── */
+    a:link    { color: #0000EE; }
+    a:visited { color: #551A8B; }
+    a:active  { color: #EE0000; }
+
+    /* ── Responsive ── */
+
+    /* ── Mobile nav bar (hidden on desktop) ── */
+    .mobile-nav { display: none; }
+
+    /* ── 1024px breakpoint: horizontal top nav ── */
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+
+      .mobile-nav {
+        display: flex;
+        align-items: center;
+        background: #c4ddce;
+        width: 100%;
+        height: 86px;
+        padding-left: 16px;
+        flex-shrink: 0;
+      }
+
+      .mobile-logo {
+        width: 35px;
+        height: 32px;
+        flex-shrink: 0;
+        margin-right: 16px;
+      }
+
+      .mobile-nav-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        height: 38px;
+        gap: 4px;
+        font-family: 'Brush Script MT', 'Segoe Script', cursive;
+        font-size: 18px;
+        font-style: italic;
+        font-weight: 400;
+        color: #000000;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .mobile-nav-item .nav-icon {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .mobile-nav-item.selected { background: #cfe5d8; }
+
+      .section { padding-left: 24px; padding-right: 24px; }
+
+      /* photos share width equally and scale down proportionally */
+      .hero-images {
+        width: 100%;
+        gap: 8px;
+      }
+
+      .hero-images img {
+        flex: 1 1 0%;
+        min-width: 0;
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 130 / 174;
+        object-fit: cover;
+      }
+
+      /* prevent fixed-width elements from overflowing narrow viewports */
+      .container { width: 100%; }
+
+      .contact-us-text,
+      .site-constructed-text { width: 100%; }
+    }
+
+    /* ── 390px breakpoint ── */
+    @media (max-width: 390px) {
+      .section { padding: 64px 16px; }
+
+      .content-col { width: 100%; }
+
+      .site-title {
+        font-size: 40px;
+        line-height: 48.84px;
+      }
+
+      .container { flex-direction: column; }
+
+      .img-text { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <marquee class="marquee-bar" behavior="scroll" direction="left" scrollamount="4">★ Welcome to Hill St. Kiosk on the Web! :-) ♦ Book us for your next event! ★ &nbsp;&nbsp; ► [ NEW ] Now booking 2026 events! ☺ ♦ Weddings ★ Birthdays ★ Corporate events ► Email us today! ;-) &nbsp;&nbsp; ~~ Warning: highly addictive :-D ~~ Hill St. Kiosk sticker machines ♦ Side effects include joy and nostalgia ☻ ~*~ &nbsp;&nbsp; ★ Stickers for everyone! ツ ~*~ Est. 2026 ♦ Your guests will LOVE it ► Book now! B-) ★ &nbsp;&nbsp; ► [ HOT ] Check out our Gallery! ☺ ♦ [ UPDATE ] Book page now live! :-P ★ [ NEW ] Sticker machines available! ► ツ &nbsp;&nbsp;&nbsp;&nbsp; ★ Welcome to Hill St. Kiosk on the Web! :-) ♦ Book us for your next event! ★ &nbsp;&nbsp; ► [ NEW ] Now booking 2026 events! ☺ ♦ Weddings ★ Birthdays ★ Corporate events ► Email us today! ;-) &nbsp;&nbsp; ~~ Warning: highly addictive :-D ~~ Hill St. Kiosk sticker machines ♦ Side effects include joy and nostalgia ☻ ~*~ &nbsp;&nbsp; ★ Stickers for everyone! ツ ~*~ Est. 2026 ♦ Your guests will LOVE it ► Book now! B-) ★ &nbsp;&nbsp; ► [ HOT ] Check out our Gallery! ☺ ♦ [ UPDATE ] Book page now live! :-P ★ [ NEW ] Sticker machines available! ► ツ</marquee>
+
+  <nav class="mobile-nav">
+    <img class="mobile-logo" src="images/hill-st-kiosk-logo.svg" alt="Hill St. Kiosk">
+    <a href="index.html" class="mobile-nav-item selected"><img src="images/folder-icon-check.png" alt="" class="nav-icon">Home</a>
+    <a href="book.html" class="mobile-nav-item"><img src="images/folder-icon.png" alt="" class="nav-icon">Book</a>
+    <a href="gallery.html" class="mobile-nav-item"><img src="images/folder-icon.png" alt="" class="nav-icon">Gallery</a>
+    <a href="about.html" class="mobile-nav-item"><img src="images/folder-icon.png" alt="" class="nav-icon">About</a>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <!-- sidebar: 200px wide, #c4ddce, full remaining height -->
+    <div class="sidebar">
+
+      <!-- logo: x=48, y=80; 103.72×94px; title + tagline below -->
+      <div class="logo-wrap">
+        <div class="logo-star-wrap">
+          <a href="index.html" class="logo-link">
+            <img src="images/hill-st-kiosk-logo.svg" alt="Hill St. Kiosk logo" width="104" height="94">
+          </a>
+        </div>
+        <p class="sidebar-title">Hill St. Kiosk</p>
+        <p class="sidebar-tagline">a sticker machine company</p>
+      </div>
+
+      <!-- sidebar-pages: y=254; four items 200×45px -->
+      <nav class="sidebar-nav">
+        <a href="index.html" class="nav-item selected">
+          <img src="images/folder-icon-check.png" alt="" class="nav-icon">Home
+        </a>
+        <a href="book.html" class="nav-item">
+          <img src="images/folder-icon.png" alt="" class="nav-icon">Book
+        </a>
+        <a href="gallery.html" class="nav-item">
+          <img src="images/folder-icon.png" alt="" class="nav-icon">Gallery
+        </a>
+        <a href="about.html" class="nav-item">
+          <img src="images/folder-icon.png" alt="" class="nav-icon">About
+        </a>
+      </nav>
+
+    </div>
+
+    <!-- section: 1240×847px, #ffffff -->
+    <div class="section">
+      <div class="content-col">
+
+        <!-- Hill St. Kiosk: Helvetica Neue Bold 56px, centered -->
+        <h1 class="site-title">Hill St. Kiosk</h1>
+
+        <!-- container-hero: 480×226px -->
+        <div class="container-hero">
+          <!-- 3 images × 130×174px, 27px gaps, 444px total -->
+          <div class="hero-images">
+            <img src="images/img-stock.png" alt="" width="130" height="174">
+            <img src="images/img-stock.png" alt="" width="130" height="174">
+            <img src="images/img-stock.png" alt="" width="130" height="174">
+          </div>
+          <!-- TNR Bold 24px, centered -->
+          <p class="hero-text">Welcome to Hill St. Kiosk on the Web!</p>
+        </div>
+
+        <!-- container: two 240px cards side by side = 480px -->
+        <div class="container">
+
+          <div class="img-text">
+            <!-- 240×120px, border #c5c5c5 -->
+            <div class="missing-img-wrap">
+              <img src="images/missing-img.png" alt="">
+            </div>
+            <!-- TNR Regular 18px, left-aligned -->
+            <p>Hill St. Kiosk is a sticker machine company and can be found on Instagram.</p>
+          </div>
+
+          <div class="img-text">
+            <div class="missing-img-wrap">
+              <img src="images/missing-img.png" alt="">
+            </div>
+            <p>Give your event guests a nostalgic dopamine experience they'll remember!</p>
+          </div>
+
+        </div>
+
+        <!-- contact-us-text: 480×50px -->
+        <div class="contact-us-text">
+          <p class="contact-label">Contact Us!</p>
+          <p class="contact-email"><a href="book.html#booking-form">use this link here</a></p>
+        </div>
+
+        <!-- site-constructed-text: 480×40px -->
+        <div class="site-constructed-text">
+          <p class="attribution">This site was constructed and maintained by Roy K.</p>
+          <p class="copyright">Copyright &copy; 2026 Hill St Kiosk</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <script>
+    (function () {
+      var N = 5;
+      var history = [];
+      var ghosts = [];
+      var mx = -200, my = -200;
+      var active = false;
+      var hideTimer;
+      var isPointer = false;
+
+      // Primary cursor: 48×48, zero lag — sits exactly at the mouse tip
+      var primary = document.createElement('img');
+      primary.src = 'images/Cursor79.cur';
+      primary.style.cssText = 'position:fixed;pointer-events:none;z-index:9999;width:48px;height:48px;image-rendering:pixelated;left:-200px;top:-200px;';
+      document.body.appendChild(primary);
+
+      document.addEventListener('mousemove', function (e) {
+        mx = e.clientX; my = e.clientY;
+        active = true;
+        primary.style.left = mx + 'px';
+        primary.style.top  = my + 'px';
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(function () {
+          active = false;
+          history.length = 0;
+          for (var i = 0; i < N; i++) { ghosts[i].style.left = '-200px'; ghosts[i].style.top = '-200px'; }
+        }, 100);
+      });
+
+      // Swap primary to pointer cursor when over links/buttons
+      document.addEventListener('mouseover', function (e) {
+        var el = e.target;
+        var onPointer = !!(el && el.closest && el.closest('a, button'));
+        if (onPointer !== isPointer) {
+          isPointer = onPointer;
+          primary.src = isPointer ? 'images/Cursor107.cur' : 'images/Cursor79.cur';
+        }
+      });
+
+      for (var i = 0; i < N; i++) {
+        var g = document.createElement('img');
+        g.src = 'images/Cursor79.cur';
+        g.style.cssText = 'position:fixed;pointer-events:none;z-index:9998;width:48px;height:48px;image-rendering:pixelated;left:-200px;top:-200px;opacity:' + (0.5 - i * 0.4 / 6).toFixed(2);
+        document.body.appendChild(g);
+        ghosts.push(g);
+      }
+
+      setInterval(function () {
+        if (!active) return;
+        history.unshift({ x: mx, y: my });
+        if (history.length > N + 1) history.length = N + 1;
+        for (var i = 0; i < N; i++) {
+          var p = history[i + 1] || { x: -200, y: -200 };
+          ghosts[i].style.left = p.x + 'px';
+          ghosts[i].style.top  = p.y + 'px';
+        }
+      }, 50);
+    }());
+  </script>
+  <script>
+    (function() {
+      var positions = [
+        { top: '-12px', left:  '-6px' },
+        { top: '-14px', left:  '38px' },
+        { top: '-12px', left:  '88px' },
+        { top:  '10px', left: '108px' },
+        { top:  '45px', left: '112px' },
+        { top:  '86px', left:  '88px' },
+        { top:  '90px', left:  '38px' },
+        { top:  '86px', left:  '-6px' },
+        { top:  '45px', left: '-14px' },
+        { top:  '10px', left: '-14px' },
+      ];
+      var chars = ['★', '☆'];
+      document.querySelectorAll('.logo-star-wrap').forEach(function(wrap) {
+        var hovering = false;
+        var timer = null;
+        var lastIdx = -1;
+        function spawnStar() {
+          var idx;
+          do { idx = Math.floor(Math.random() * positions.length); } while (idx === lastIdx);
+          lastIdx = idx;
+          var el = document.createElement('span');
+          el.className = 'star';
+          el.textContent = chars[Math.floor(Math.random() * 2)];
+          el.style.top  = positions[idx].top;
+          el.style.left = positions[idx].left;
+          wrap.appendChild(el);
+          setTimeout(function() {
+            if (el.parentNode) {
+              el.style.animation = 'star-disappear 0.3s ease forwards';
+              el.addEventListener('animationend', function() {
+                if (el.parentNode) el.parentNode.removeChild(el);
+              }, { once: true });
+            }
+          }, 400);
+        }
+        function tick() {
+          if (!hovering) return;
+          spawnStar();
+          timer = setTimeout(tick, 250 + Math.floor(Math.random() * 300));
+        }
+        wrap.addEventListener('mouseenter', function() {
+          hovering = true;
+          tick();
+        });
+        wrap.addEventListener('mouseleave', function() {
+          hovering = false;
+          clearTimeout(timer);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
