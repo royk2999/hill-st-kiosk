@@ -515,7 +515,7 @@
 
       // Primary cursor: 48×48, zero lag — sits exactly at the mouse tip
       var primary = document.createElement('img');
-      primary.src = 'images/Cursor79.cur';
+      primary.src = 'images/Cursor79.png';
       primary.style.cssText = 'position:fixed;pointer-events:none;z-index:9999;width:48px;height:48px;image-rendering:pixelated;left:-200px;top:-200px;';
       document.body.appendChild(primary);
 
@@ -538,13 +538,13 @@
         var onPointer = !!(el && el.closest && el.closest('a, button'));
         if (onPointer !== isPointer) {
           isPointer = onPointer;
-          primary.src = isPointer ? 'images/Cursor107.cur' : 'images/Cursor79.cur';
+          primary.src = isPointer ? 'images/Cursor107.png' : 'images/Cursor79.png';
         }
       });
 
       for (var i = 0; i < N; i++) {
         var g = document.createElement('img');
-        g.src = 'images/Cursor79.cur';
+        g.src = 'images/Cursor79.png';
         g.style.cssText = 'position:fixed;pointer-events:none;z-index:9998;width:48px;height:48px;image-rendering:pixelated;left:-200px;top:-200px;opacity:' + (0.5 - i * 0.4 / 6).toFixed(2);
         document.body.appendChild(g);
         ghosts.push(g);
